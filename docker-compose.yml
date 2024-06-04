@@ -12,7 +12,7 @@ services:
         max-file: "10"
     environment:
       - UDEV=1
-      - CameraAutostart=false
+      - CameraAutostart=true
     volumes:
       - "/dev:/dev"
       - "/run/udev:/run/udev:ro"
