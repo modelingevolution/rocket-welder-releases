@@ -1,0 +1,64 @@
+services:
+  modelingevolution.rocketwelder.rpi:
+    image: modelingevolution/rocket-welder:1.0.0
+    container_name: app
+    restart: always
+    privileged: true
+    network_mode: host
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "25m"
+        max-file: "10"
+    environment:
+      - UDEV=1
+      - CameraAutostart=false
+    volumes:
+      - "/dev:/dev"
+      - "/run/udev:/run/udev:ro"
+      - "/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket"
+    depends_on:
+      - eventstore.db
+
+  eventstore.db:
+    image: eventstore/eventstore:23.10.0-alpha-arm64v8
+    container_name: eventstore
+    environment:
+      - EVENTSTORE_PROJECTION_COMPILATION_TIMEOUT=2500
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_EXT_TCP_PORT=1113
+      - EVENTSTORE_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+    restart: always
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl --fail --insecure http://eventstore.db:2113/health/live || exit 1",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "25m"
+        max-file: "10"
+    ports:
+      - "127.0.0.1:1113:1113"
+      - "127.0.0.1:2113:2113"
+    volumes:
+      - type: volume
+        source: eventstore-volume-data
+        target: /var/lib/eventstore
+      - type: volume
+        source: eventstore-volume-logs
+        target: /var/log/eventstore
+
+volumes:
+  eventstore-volume-data:
+  eventstore-volume-logs:
