@@ -62,3 +62,4 @@ services:
 volumes:
   eventstore-volume-data:
   eventstore-volume-logs:
+  
