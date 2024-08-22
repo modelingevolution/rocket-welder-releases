@@ -17,6 +17,7 @@ services:
       - "/dev:/dev"
       - "/run/udev:/run/udev:ro"
       - "/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket"
+      - "/data-storage:/app/wwwroot/videos"
     depends_on:
       - eventstore.db
 
