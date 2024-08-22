@@ -1,6 +1,6 @@
 services:
   modelingevolution.rocketwelder.rpi:
-    image: modelingevolution/rocket-welder:1.0.4
+    image: modelingevolution/rocket-welder:1.0.5
     container_name: app
     restart: always
     privileged: true
