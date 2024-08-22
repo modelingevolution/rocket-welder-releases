@@ -2,9 +2,6 @@ services:
   oleddisplay:
     image: modelingevolution/oleddisplay:1.0.0
     container_name: oledDisplay
-    build:
-      context: .
-      dockerfile: RpiScreenOled/Dockerfile
     restart: always
     privileged: true
     logging:
@@ -12,9 +9,8 @@ services:
       options:
         max-size: "25m"
         max-file: "10"
-    devices:
+    volumes:
     - "/dev:/dev"
-    - "/dev/i2c-1:/dev/i2c-1"  
   modelingevolution.rocketwelder.rpi:
     image: modelingevolution/rocket-welder:1.0.5
     container_name: app
