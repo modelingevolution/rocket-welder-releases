@@ -13,7 +13,7 @@ services:
     volumes:
       - "/dev:/dev"
   modelingevolution.rocketwelder.rpi:
-    image: modelingevolution/rocket-welder:1.1.1
+    image: modelingevolution/rocket-welder:1.1.2
     container_name: app
     restart: always
     privileged: true
